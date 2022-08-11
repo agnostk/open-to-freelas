@@ -5,6 +5,7 @@ import {
   HostListener,
   ViewChild,
 } from '@angular/core';
+import { ImageCropperComponent } from '../image-cropper/image-cropper.component';
 
 @Component({
   selector: 'app-image-builder',
@@ -18,13 +19,18 @@ export class ImageBuilderComponent implements AfterViewInit {
   canDownload = false;
   showCropModal = false;
   loadedImageFile: any = undefined;
+  loading = false;
   croppedImageFile: any = undefined;
   @ViewChild('imgCanvas')
   imgCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('inputFile')
+  inputFile!: ElementRef<HTMLInputElement>;
   context!: CanvasRenderingContext2D;
   placeholder!: HTMLImageElement;
   render = false;
   downloadUrl = '';
+  @ViewChild('imageCropper')
+  imageCropper!: ImageCropperComponent;
 
   @HostListener('dragover', ['$event']) onDragOver(event: Event) {
     event.preventDefault();
@@ -45,6 +51,7 @@ export class ImageBuilderComponent implements AfterViewInit {
     if (event.dataTransfer!.files && event.dataTransfer!.files[0]) {
       this.loadedImageFile = event.dataTransfer!.files[0];
       this.showCropModal = true;
+      this.canDownload = false;
     }
   }
 
@@ -64,6 +71,7 @@ export class ImageBuilderComponent implements AfterViewInit {
     if (event.target.files && event.target.files[0]) {
       this.loadedImageFile = event.target.files[0];
       this.showCropModal = true;
+      this.canDownload = false;
     }
   }
 
@@ -83,10 +91,12 @@ export class ImageBuilderComponent implements AfterViewInit {
       badge.onload = () => {
         this.context.drawImage(badge, 0, 0, this.CANVAS_SIZE, this.CANVAS_SIZE);
       };
+      this.inputFile.nativeElement.value = '';
     };
   }
 
   setupPicture(): void {
+    this.loading = true;
     var picture = new Image();
     picture.src = this.croppedImageFile;
     picture.onload = () => {
@@ -97,7 +107,6 @@ export class ImageBuilderComponent implements AfterViewInit {
       this.placeholder.width = targetSize;
       this.placeholder.height = targetSize;
       this.placeholder.src = picture.src;
-      setTimeout(() => this.setupExportableImage(), 300);
     };
   }
 
@@ -119,16 +128,20 @@ export class ImageBuilderComponent implements AfterViewInit {
         outCanvas.height
       );
     this.downloadUrl = outCanvas.toDataURL();
-    this.canDownload = true;
+    setTimeout(() => {
+      this.canDownload = true;
+      this.loading = false;
+    }, 300);
   }
 
   onImageCrop(event: any) {
-    console.log(event);
     this.croppedImageFile = event;
   }
 
   crop() {
     this.showCropModal = false;
+    this.imageCropper.crop();
     this.setupPicture();
+    setTimeout(() => this.setupExportableImage(), 1000);
   }
 }

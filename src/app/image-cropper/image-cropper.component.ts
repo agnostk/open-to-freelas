@@ -1,6 +1,13 @@
-import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import * as ngxCropper from 'ngx-image-cropper';
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ViewChild,
+} from '@angular/core';
 
 @Component({
   selector: 'app-image-cropper',
@@ -12,16 +19,21 @@ export class ImageCropperComponent {
   file: any = undefined;
   @Output()
   imageCropEvent = new EventEmitter<string>();
-
+  loading = true;
   croppedImage: any = '';
+  @ViewChild(ngxCropper.ImageCropperComponent)
+  imageCropper!: ngxCropper.ImageCropperComponent;
 
-  imageCropped(event: ImageCroppedEvent) {
+  imageCropped(event: ngxCropper.ImageCroppedEvent) {
     this.croppedImage = event.base64;
     this.imageCropEvent.emit(this.croppedImage);
   }
-  imageLoaded(image: LoadedImage) {
-    console.log(image);
+
+  cropperReady() {
+    this.loading = false;
   }
-  cropperReady() {}
-  loadImageFailed() {}
+
+  public crop() {
+    this.imageCropper.crop();
+  }
 }
