@@ -1,0 +1,110 @@
+<main
+  class="my-6 flex h-full w-full flex-col items-center justify-center gap-y-12 text-white xl:my-10"
+>
+  <section
+    class="flex flex-col items-center justify-center gap-y-1 rounded-lg p-8 text-center font-semibold transition-all ease-in-out xl:p-16"
+    [ngClass]="dragging ? 'border-2 border-dashed p-10' : 'border'"
+  >
+    <input
+      hidden
+      id="dropFile"
+      type="file"
+      (change)="onAddFile($event)"
+      accept="image/*"
+    />
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-8 w-8"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    <h2>Arraste e solte sua imagem aqui</h2>
+    <h2>ou</h2>
+    <label
+      class="rounded-full bg-rose-600 px-4 py-2 text-white transition-all ease-in-out hover:bg-rose-500"
+      for="dropFile"
+      >Procurar Imagem</label
+    >
+  </section>
+
+  <section class="overflow-hidden rounded-full shadow">
+    <canvas #imgCanvas></canvas>
+  </section>
+
+  <a
+    [href]="downloadUrl"
+    download="foto-open-to-freelas.png"
+    class="flex items-center gap-2 rounded-full px-4 py-2 font-semibold text-white transition-all ease-in-out"
+    [ngClass]="
+      canDownload
+        ? 'pointer-events-auto bg-rose-600 hover:bg-rose-500'
+        : 'pointer-events-none bg-gray-600 text-gray-400'
+    "
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+        clip-rule="evenodd"
+      />
+    </svg>
+    Baixar Foto
+  </a>
+</main>
+
+<footer class="mt-12 mb-6 text-center text-sm text-white">
+  <p>
+    Uma iniciativa de
+    <a
+      class="font-semibold hover:underline"
+      href="https://www.linkedin.com/in/doranygoncalvesbraga/"
+      >Dorany G.</a
+    >
+  </p>
+  <p>
+    Desenvolvido por
+    <a
+      class="font-semibold hover:underline"
+      href="https://www.linkedin.com/in/felipehac/"
+      >Felipe Cardoso</a
+    >
+  </p>
+  <p class="py-2">
+    <a
+      class="font-semibold hover:underline"
+      href="https://www.linkedin.com/feed/hashtag/?keywords=opentofreelas"
+      >#OpenToFreelas</a
+    >
+  </p>
+</footer>
+
+<div
+  *ngIf="showCropModal"
+  class="absolute top-0 left-0 flex h-full w-full items-center justify-center bg-gray-700/50"
+>
+  <div class="m-4 h-fit w-fit rounded-lg bg-gray-800 p-8 text-center">
+    <h1 class="text-xl font-semibold text-white">Ajuste sua foto!</h1>
+    <app-image-cropper
+      class="my-6"
+      [file]="loadedImageFile"
+      (imageCropEvent)="onImageCrop($event)"
+    ></app-image-cropper>
+    <button
+      (click)="crop()"
+      class="rounded-full bg-rose-600 px-4 py-2 text-white transition-all ease-in-out hover:bg-rose-500"
+    >
+      Continuar
+    </button>
+  </div>
+</div>

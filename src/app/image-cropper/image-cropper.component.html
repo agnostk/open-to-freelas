@@ -1,0 +1,13 @@
+<div class="max-w-[380px]">
+  <image-cropper
+    class="max-w-fit"
+    [maintainAspectRatio]="true"
+    [aspectRatio]="1 / 1"
+    [imageFile]="file"
+    format="png"
+    (imageCropped)="imageCropped($event)"
+    (imageLoaded)="imageLoaded($event)"
+    (cropperReady)="cropperReady()"
+    (loadImageFailed)="loadImageFailed()"
+  ></image-cropper>
+</div>
