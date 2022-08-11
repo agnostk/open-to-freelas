@@ -5,7 +5,13 @@
     class="flex flex-col items-center justify-center gap-y-1 rounded-lg p-8 text-center font-semibold transition-all ease-in-out xl:p-16"
     [ngClass]="dragging ? 'border-2 border-dashed p-10' : 'border'"
   >
-    <input hidden id="dropFile" type="file" (change)="onAddFile($event)" />
+    <input
+      hidden
+      id="dropFile"
+      type="file"
+      (change)="onAddFile($event)"
+      accept="image/*"
+    />
     <svg
       xmlns="http://www.w3.org/2000/svg"
       class="h-8 w-8"
