@@ -94,7 +94,7 @@ export class AppComponent implements AfterViewInit {
         this.placeholder.width = targetSize;
         this.placeholder.height = targetSize;
         this.placeholder.src = event.target.result;
-        setTimeout(() => this.setupExportableImage(), 0);
+        setTimeout(() => this.setupExportableImage(), 1000);
       };
     };
   }
